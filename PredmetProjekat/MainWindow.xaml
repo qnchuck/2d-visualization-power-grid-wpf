@@ -16,7 +16,7 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="30" HorizontalAlignment="Center">
                 <Button x:Name="poligon" Content="Draw poligon" Width="90" Click="PoligonButton_Click"/>
                 <Separator Width="10"/>
-                <Button x:Name="elipsa" Content="Draw ellipse" Width="90"  Click="EllipseButton_Click"/>
+                <Button x:Name="elipsa" Content="Draw ellipse" Width="90"  Click="EllipseButton_Click" Height="30" VerticalAlignment="Bottom"/>
                 <Separator Width="10"/>
                 <Button x:Name="addtext" Content="Add Text" Width="90"  Click="AddTextButton_Click"/>
                 <Separator Width="10"/>
