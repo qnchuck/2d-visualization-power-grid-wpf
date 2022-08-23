@@ -42,7 +42,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Coordinate.cs" />
     <Compile Include="LineEntity.cs" />
     <Compile Include="NewEntity.cs" />
@@ -51,8 +50,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubstationEntity.cs" />
     <Compile Include="SwitchEntity.cs" />
-    <Compile Include="Vodd.cs" />
-    <Compile Include="Vodov.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

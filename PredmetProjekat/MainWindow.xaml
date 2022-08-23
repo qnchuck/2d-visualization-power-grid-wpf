@@ -5,14 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PredmetProjekat"
         mc:Ignorable="d"
-        Title="MainWindow" Height="940" Width="830">
+        Title="MainWindow" Height="1550" Width="1600">
     <Grid>
 
         <DockPanel>
             <Slider x:Name="slider" Minimum=".1" Maximum="10" Value="1" DockPanel.Dock="Top" Height="20"/>
-            <StackPanel DockPanel.Dock="Top" Background="White" Height="30">
-                <Button x:Name="LoadButton" Content="Load Model" Click="LoadButton_Click" Width="150" Margin="5"/>
+            <StackPanel DockPanel.Dock="Top" Background="White"
+                        Orientation="Horizontal" Height="30"
+                        HorizontalAlignment="Center">
+                <ComboBox x:Name="SelectSize" Width="150" Margin="5">
+
+                    <ComboBoxItem IsSelected="True">200x200</ComboBoxItem>
+                    <ComboBoxItem >750x750</ComboBoxItem>
+                    <ComboBoxItem>1500x1500</ComboBoxItem>
+
+                </ComboBox>
+                <Button x:Name="LoadButton" Content="Load Model" 
+                        Click="LoadButton_Click" Width="150" />
+
             </StackPanel>
+
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="30" HorizontalAlignment="Center">
                 <Button x:Name="poligon" Content="Draw poligon" Width="90" Click="PoligonButton_Click"/>
                 <Separator Width="10"/>
@@ -29,7 +41,7 @@
             </StackPanel>
             <ScrollViewer Name="skrolbar" HorizontalScrollBarVisibility="Auto" 
                           VerticalScrollBarVisibility="Auto" PreviewMouseDown="elementi_MouseRightButtonDown" >
-                <Canvas x:Name="elementi" Height="800" Width="800"   >
+                <Canvas x:Name="elementi" Height="200" Width="200"   >
                     <Canvas.LayoutTransform>
                         <ScaleTransform ScaleX="{Binding Value, ElementName=slider}"
                                 ScaleY="{Binding Value, ElementName=slider}"/>

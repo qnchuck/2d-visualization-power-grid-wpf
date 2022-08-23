@@ -23,13 +23,18 @@ namespace PredmetProjekat
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        enum pos { obj,line,none}
         public double noviX, noviY;
-        private bool[,] positions = new bool[400, 400];
+        private int dimensions = 200;
+        private bool[,] positions = new bool[200, 200];
+        private pos[,] positionsLines = new pos[200, 200];
         public MainWindow()
         {
             InitializeComponent();
-
+            positions = new bool[dimensions, dimensions];
+            
+            elementi.Width = dimensions;
+            elementi.Height = dimensions;
         }
 
         private void PoligonButton_Click(object sender, RoutedEventArgs e)
@@ -69,7 +74,33 @@ namespace PredmetProjekat
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
+            elementi.Children.Clear();
+            DateTime time;
+            DateTime sec1= DateTime.Now;
+            int selectedS = SelectSize.SelectedIndex;
+            switch (selectedS)
+            {
+                case 0:
+                    dimensions = 200;
+                    break;
+                case 1:
+                    dimensions = 750;
+                    break;
+                case 2:
+                    dimensions = 1500;
+                    break;
+            }
+            for (int i = 0; i < dimensions; i++)
+            {
 
+                for (int j = 0; j < dimensions; j++)
+                {
+                    positionsLines[i, j] = pos.none;
+                }
+            }
+            elementi.Height = dimensions;
+            elementi.Width = dimensions;
+            positions = new bool[dimensions, dimensions];
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load("Geographic.xml");
 
@@ -104,8 +135,8 @@ namespace PredmetProjekat
                        newY = Approximation.GetY(elementi.Height, noviY, minY, maxY);
 
                 Coordinate coordinate = Approximation.FindPosition(positions,newX, newY);
-
-                positions[coordinate.X/2, coordinate.Y/2] = true;
+                positionsLines[coordinate.X / 2, coordinate.Y / 2] = pos.obj;
+                //positions[coordinate.X/2, coordinate.Y/2] = true;
                 //vodovodi[coordinate.x / 2, coordinate.y / 2] = new Vodov(positions[coordinate.x / 2, coordinate.y / 2], nodeobj.Id);
                 rectangle.Margin = new Thickness(coordinate.X, coordinate.Y, 0, 0);
                 NewEntity newEntity = new NewEntity(nodeobj.Id, coordinate.X, coordinate.Y);
@@ -154,7 +185,9 @@ namespace PredmetProjekat
                 double newX = Approximation.GetX(elementi.Width,noviX, minX, maxX), newY = Approximation.GetY(elementi.Height,noviY, minY, maxY);
 
                 Coordinate coordinate = Approximation.FindPosition(positions,newX, newY);
-                positions[coordinate.X/2, coordinate.Y/2] = true ;
+
+                positionsLines[coordinate.X / 2, coordinate.Y / 2] = pos.obj;
+                //positions[coordinate.X/2, coordinate.Y/2] = true ;
                 //vodovodi[coordinate.x / 2, coordinate.y / 2] = new Vodov(positions[coordinate.x / 2, coordinate.y / 2], switchobj.Id);
                 NewEntity newEntity = new NewEntity(switchobj.Id, coordinate.X, coordinate.Y);
 
@@ -206,8 +239,9 @@ namespace PredmetProjekat
                 rectangle.Height = 2;
                 double newX = Approximation.GetX(elementi.Width, noviX, minX, maxX), newY = Approximation.GetY(elementi.Height, noviY, minY, maxY);
                 Coordinate coordinate = Approximation.FindPosition(positions, newX, newY);
-                positions[coordinate.X/2, coordinate.Y/2] = true;
+                //positions[coordinate.X/2, coordinate.Y/2] = true;
 
+                positionsLines[coordinate.X / 2, coordinate.Y / 2] = pos.obj;
                 // vodovodi[coordinate.x / 2, coordinate.y / 2] = new Vodov(positions[coordinate.x / 2, coordinate.y / 2], sub.Id);
                 NewEntity newEntity = new NewEntity(sub.Id, coordinate.X, coordinate.Y);
 
@@ -232,7 +266,10 @@ namespace PredmetProjekat
             }
 
             #endregion
-
+            DateTime now2 =  DateTime.Now;
+           // DateTime.
+            TimeSpan ttime = now2 - sec1;//DateTime.Compare(now2, sec1);// 
+            Console.WriteLine(ttime.TotalMilliseconds);
         }
     }
 }
