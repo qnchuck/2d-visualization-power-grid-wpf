@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
+using static PredmetProjekat.MainWindow;
 
 namespace PredmetProjekat.Positioning
 {
@@ -14,10 +15,10 @@ namespace PredmetProjekat.Positioning
         
         public static Coordinate FindPosition(bool[,] positions, double x,double y)
         {
-            Coordinate coordinate = new Coordinate();
+            Coordinate coordinate = new Coordinate { X = 0, Y = 0 };
             bool foundPosition = false;
-            int integerX = (Int32)x / 2 - 1;
-            int integerY = (Int32)y / 2 - 1;
+            short integerX = (short)(x - 1);
+            short integerY = (short)(y - 1);
 
             if (integerX < 0)
             {
@@ -31,8 +32,8 @@ namespace PredmetProjekat.Positioning
             if (!positions[integerX, integerY])
             {
                 positions[integerX, integerY] = true;
-                coordinate.X = 2 * integerX;
-                coordinate.Y = 2 * integerY;
+                coordinate.X = integerX;
+                coordinate.Y = integerY;
                 return coordinate;
             }
             else
@@ -53,8 +54,8 @@ namespace PredmetProjekat.Positioning
                                 if (!positions[j, i])
                                 {
                                     positions[j, i] = true;
-                                    coordinate.X = 2 * j;
-                                    coordinate.Y = 2 * i;
+                                    coordinate.X = (short)j;
+                                    coordinate.Y = (short)i;
                                     foundPosition = true;
                                     return coordinate;
                                 }
