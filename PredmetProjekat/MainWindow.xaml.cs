@@ -30,10 +30,10 @@ namespace PredmetProjekat
         }
         public enum pos { obj, line, none }
         public double noviX, noviY;
-        private int dimensions = 200;
-        private bool[,] positions = new bool[200, 200];
-        public pos[,] positionsLines = new pos[200, 200];
-        public bool[,] linesObjects = new bool[200, 200];
+        private int dimensions = 400;
+        private bool[,] positions = new bool[400, 400];
+        public pos[,] positionsLines = new pos[400, 400];
+        public bool[,] linesObjects = new bool[400, 400];
         Dictionary<long, NewEntity> entities = new Dictionary<long, NewEntity>();
 
         Dictionary<long, NodeEntity> nodes = new Dictionary<long, NodeEntity>();
@@ -90,7 +90,7 @@ namespace PredmetProjekat
             switch (selectedS)
             {
                 case 0:
-                    dimensions = 200;
+                    dimensions = 400;
                     break;
                 case 1:
                     dimensions = 750;
@@ -99,18 +99,11 @@ namespace PredmetProjekat
                     dimensions = 1500;
                     break;
             }
-            positionsLines = new pos[dimensions, dimensions];
-            for (int i = 0; i < dimensions; i++)
-            {
-                for (int j = 0; j < dimensions; j++)
-                {
-                    positionsLines[i, j] = pos.none;
-                }
-            }
+            positionsLines = new pos[400, 400];
             elementi.Height = dimensions;
             elementi.Width = dimensions;
-            linesObjects = new bool[dimensions, dimensions];
-            positions = new bool[dimensions, dimensions];
+            linesObjects = new bool[400, 400];
+            positions = new bool[400, 400];
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load("Geographic.xml");
 
@@ -136,18 +129,21 @@ namespace PredmetProjekat
                 Approximation.ToLatLon(nodeobj.X, nodeobj.Y, 34, out noviY, out noviX);
                 System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
                 rectangle.Fill = System.Windows.Media.Brushes.Blue;
-                rectangle.Width = 1;
-                rectangle.Height = 1;
+                rectangle.Width = 1.0*dimensions/400;
+                rectangle.Height =1.0*dimensions/400;
                 rectangle.Name = "ime" + nodeobj.Id.ToString();
 
-                double newX = Approximation.GetX(elementi.Width, noviX, minX, maxX),
-                       newY = Approximation.GetY(elementi.Height, noviY, minY, maxY);
+                double newX = Approximation.GetX(400, noviX, minX, maxX),
+                       newY = Approximation.GetY(400, noviY, minY, maxY);
 
                 Coordinate coordinate = Approximation.FindPosition(positions, newX, newY);
                 positionsLines[coordinate.X, coordinate.Y] = pos.obj;
                 positions[coordinate.X, coordinate.Y] = true;
                 //vodovodi[coordinate.x / 2, coordinate.y / 2] = new Vodov(positions[coordinate.x / 2, coordinate.y / 2], nodeobj.Id);
-                rectangle.Margin = new Thickness(coordinate.X, coordinate.Y, 0, 0);
+
+
+                rectangle.Margin = new Thickness(Approximation.GetCanvasX(dimensions, coordinate.X, 400), Approximation.GetCanvasY(dimensions, coordinate.Y, 400), 0, 0);
+
                 NewEntity newEntity = new NewEntity(nodeobj.Id, coordinate.X, coordinate.Y);
 
                 if (dimensions == 1500)
@@ -193,9 +189,9 @@ namespace PredmetProjekat
                 Approximation.ToLatLon(switchobj.X, switchobj.Y, 34, out noviY, out noviX);
                 System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
                 rectangle.Fill = System.Windows.Media.Brushes.Green;
-                rectangle.Width = 1;
-                rectangle.Height = 1;
-                double newX = Approximation.GetX(elementi.Width, noviX, minX, maxX), newY = Approximation.GetY(elementi.Height, noviY, minY, maxY);
+                rectangle.Width = 1.0*dimensions / 400;
+                rectangle.Height =  1.0*dimensions / 400;
+                double newX = Approximation.GetX(400, noviX, minX, maxX), newY = Approximation.GetY(400, noviY, minY, maxY);
 
                 Coordinate coordinate = Approximation.FindPosition(positions, newX, newY);
 
@@ -209,8 +205,8 @@ namespace PredmetProjekat
 
                 rectangle.Name = "ime" + switchobj.Id.ToString() + "Q" + "true";
 
-                rectangle.Margin = new Thickness(coordinate.X, coordinate.Y, 0, 0);
 
+                rectangle.Margin = new Thickness(Approximation.GetCanvasX(dimensions, coordinate.X, 400), Approximation.GetCanvasY(dimensions, coordinate.Y, 400), 0, 0);
                 ToolTip ttip = new ToolTip();
 
                 ttip.Content = "Switch \n ID: " + switchobj.Id + "  Name: " + switchobj.Name + " Status: " + switchobj.Status;
@@ -248,9 +244,9 @@ namespace PredmetProjekat
                 Approximation.ToLatLon(sub.X, sub.Y, 34, out noviY, out noviX);
                 System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
                 rectangle.Fill = System.Windows.Media.Brushes.Brown;
-                rectangle.Width = 1;
-                rectangle.Height = 1;
-                double newX = Approximation.GetX(elementi.Width, noviX, minX, maxX), newY = Approximation.GetY(elementi.Height, noviY, minY, maxY);
+                rectangle.Width =1.0*dimensions / 400;
+                rectangle.Height = 1.0*dimensions / 400; 
+                double newX = Approximation.GetX(400, noviX, minX, maxX), newY = Approximation.GetY(400, noviY, minY, maxY);
                 Coordinate coordinate = Approximation.FindPosition(positions, newX, newY);
                 positions[coordinate.X, coordinate.Y] = true;
 
@@ -261,7 +257,7 @@ namespace PredmetProjekat
                 entities.Add(newEntity.Id, newEntity);
                 //substations.Add(sub.Id, sub);
 
-                rectangle.Margin = new Thickness(coordinate.X, coordinate.Y, 0, 0);
+                rectangle.Margin = new Thickness(Approximation.GetCanvasX(dimensions,coordinate.X,400),Approximation.GetCanvasY(dimensions,coordinate.Y,400), 0, 0);
                 rectangle.Name = "ime" + sub.Id.ToString() + "Q" + "true";
 
                 ToolTip ttip = new ToolTip();
@@ -359,7 +355,7 @@ namespace PredmetProjekat
                 Coordinate source = new Coordinate {X= node.X1,Y= node.Y1 };
                 Coordinate dest = new Coordinate { X = node.X2, Y = node.Y2 };
                 Node destination = new Node(dest.X,dest.Y);
-                BreadthFirstSearch.DoBFS(linesObjects, source, dest,ref destination,dimensions);
+                BreadthFirstSearch.DoBFS(linesObjects, source, dest,ref destination,400);
                
                 if (!(destination.Parent is null))
                 {
@@ -370,7 +366,8 @@ namespace PredmetProjekat
                     for (int j = 0; j < cnt; j++)
                     {
                         linesObjects[destination.X, destination.Y] = true;
-                        polyline.Points.Add(new Point(destination.X + 0.5, destination.Y + 0.5));
+
+                        polyline.Points.Add(new Point(Approximation.GetCanvasX(dimensions, destination.X, 400) + 0.5*dimensions/400, Approximation.GetCanvasX(dimensions, destination.Y, 400)+ 0.5*dimensions/400));
 
                         destination = destination.Parent;
                     }
@@ -382,10 +379,10 @@ namespace PredmetProjekat
                         destination = destination.Parent;
                     } while (destination.Parent != null);*/
 
-                    polyline.Points.Add(new Point(destination.X + 0.5, destination.Y + 0.5));
-                    polyline.Points.Add(new Point(source.X + 0.5, source.Y + 0.5));
+                    polyline.Points.Add(new Point(Approximation.GetCanvasX(dimensions, destination.X, 400) + 0.5 * dimensions / 400, Approximation.GetCanvasX(dimensions, destination.Y, 400) + 0.5 * dimensions / 400));
+                    //polyline.Points.Add(new Point(source.X + 0.5, source.Y + 0.5));
                     polyline.Stroke = Brushes.Black;
-                    polyline.StrokeThickness = 0.5;
+                    polyline.StrokeThickness = 0.5*dimensions/400;
                     elementi.Children.Add(polyline);
                 }
             }
@@ -405,7 +402,7 @@ namespace PredmetProjekat
                 Coordinate source = new Coordinate { X = node.X1, Y = node.Y1 };
                 Coordinate dest = new Coordinate { X = node.X2, Y = node.Y2 };
                 Node destination = new Node(dest.X, dest.Y);
-                BreadthFirstSearch.DoBFS(linesObjects, source, dest, ref destination, dimensions);
+                BreadthFirstSearch.DoBFS(linesObjects, source, dest, ref destination, 400);
 
                 if (destination.Parent != null)
                 {
@@ -415,15 +412,16 @@ namespace PredmetProjekat
                     int cnt = destination.dst;
                     for (int j = 0; j < cnt; j++)
                     {
-                       // linesObjects[destination.X, destination.Y] = true;
-                        polyline.Points.Add(new Point(destination.X + 0.5, destination.Y + 0.5));
+                        // linesObjects[destination.X, destination.Y] = true;
+                        polyline.Points.Add(new Point(Approximation.GetCanvasX(dimensions, destination.X, 400) + 0.5 * dimensions / 400, Approximation.GetCanvasX(dimensions, destination.Y, 400) + 0.5 * dimensions / 400));
 
                         destination = destination.Parent;
                     }
-                    polyline.Points.Add(new Point(destination.X + 0.5, destination.Y + 0.5));
-                    polyline.Points.Add(new Point(source.X + 0.5, source.Y + 0.5));
+                    polyline.Points.Add(new Point(Approximation.GetCanvasX(dimensions, destination.X, 400) + 0.5 * dimensions / 400, Approximation.GetCanvasX(dimensions, destination.Y, 400) + 0.5 * dimensions / 400));
+                    //polyline.Points.Add(new Point(destination.X + 0.5, destination.Y + 0.5));
+                   // polyline.Points.Add(new Point(source.X + 0.5, source.Y + 0.5));
                     polyline.Stroke = Brushes.Black;
-                    polyline.StrokeThickness = 0.5;
+                    polyline.StrokeThickness = 0.5 * dimensions / 400;
                     elementi.Children.Add(polyline);
                 }
             }

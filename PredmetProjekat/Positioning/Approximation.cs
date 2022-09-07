@@ -73,11 +73,20 @@ namespace PredmetProjekat.Positioning
             var position = (x - min) / (max - min);
             return width * position;
         }
+        public static double GetCanvasX(double canvasw,double x, double matw)
+        {
+            
+            return canvasw*x/matw;
+        }
 
         public static double GetY(double height,double y, double min, double max)
         {
-            var position = (y - min) / (max - min); ;
+            var position = (y - min) / (max - min); 
             return height - height * position;
+        }
+        public static double GetCanvasY(double canvash,double y,double math)
+        {
+            return canvash * y / math;
         }
         
 
