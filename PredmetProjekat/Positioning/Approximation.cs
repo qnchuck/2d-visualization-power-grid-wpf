@@ -94,7 +94,7 @@ namespace PredmetProjekat.Positioning
         {
 
             NodeEntity nodeobj = new NodeEntity();
-            double noviX,noviY;
+            double noviX, noviY;
             List<double> novixx = new List<double>();
             List<double> noviyy = new List<double>();
             foreach (XmlNode noden in nodeList)

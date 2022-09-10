@@ -28,31 +28,22 @@ namespace PredmetProjekat.BFS
             
             // check source and destination cell
             // of the matrix have value 1
-            bool firstC = false;
             bool[,] visited = new bool[size,size];
             // Mark the source cell as visited
             visited[src.X, src.Y] = true;
             try
             {
                 Queue<Node> nq = new Queue<Node>();
-               // Coordinate point = new Coordinate(src.X, src.Y);
                 Node node = new Models.Node(src.X,src.Y);
-                //    node.dst = 0;
-               // DateTime now2 = DateTime.Now;
+
                 node.Parent = null;
                 nq.Enqueue(node);
+
                 Node curr = new Node(1,1);
-               // Coordinate pt = new Coordinate(1, 1);
                 while (nq.Count != 0)
                 {
                     curr = nq.Peek();
-                  //  pt.X = curr.X;
-                   // pt
-                   /* if (pt.X == dst.X && pt.Y == dst.Y)
-                    {
-                        destination.setAsParent(curr);
-                        return destination;
-                    }*/
+                 
                     for (int i = 0; i < 4; i++)
                     {
                         int row = curr.X + rowNum[i];
@@ -72,17 +63,7 @@ namespace PredmetProjekat.BFS
                             {
                                 destination.dst = nodeTemp.dst;
                                 destination.Parent = parent;
-                                // cnt = nodeTemp.dst;
                                 return destination;
-                               /* 
-                                if (firstC)
-                                {
-                                    
-                                }
-                                
-                                destination.Parent = null;
-                                return destination;*/
-                                
                             }
 
                             nq.Enqueue(nodeTemp);
@@ -90,7 +71,6 @@ namespace PredmetProjekat.BFS
 
                        
                     }
-                    firstC = true;
                     nq.Dequeue();
                 }
                 /*DateTime sec2 = DateTime.Now;//DateTime.Compare(now2, sec1);// 
