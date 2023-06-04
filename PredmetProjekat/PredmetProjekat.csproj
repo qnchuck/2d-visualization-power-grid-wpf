@@ -64,6 +64,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BFS\BreadthFirstSearch.cs" />
+    <Compile Include="EntityCreation\EntityCreation.cs" />
+    <Compile Include="EntityCreation\ConcreteNodeCreation.cs" />
+    <Compile Include="EntityCreation\ConcreteSubstationCreation.cs" />
+    <Compile Include="EntityCreation\ConcreteSwitchCreation.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -103,5 +107,6 @@
       <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,16 @@ namespace PredmetProjekat.Positioning
 {
     public class Approximation 
     {
-        
+        private double xMinimum;
+        private double xMaximum;
+        private double yMinimum;
+        private double yMaximum;
+
+        public double XMinimum { get => xMinimum; set => xMinimum = value; }
+        public double XMaximum { get => xMaximum; set => xMaximum = value; }
+        public double YMinimum { get => yMinimum; set => yMinimum = value; }
+        public double YMaximum { get => yMaximum; set => yMaximum = value; }
+
         public static Coordinate FindPosition(bool[,] positions, double x,double y)
         {
             Coordinate coordinate = new Coordinate { X = 0, Y = 0 };
@@ -90,9 +100,8 @@ namespace PredmetProjekat.Positioning
         }
         
 
-        public static double GetXYMinMax(XmlNodeList nodeList, bool xy, bool minmax)
+        public static Approximation GetXYMinMax(XmlNodeList nodeList)
         {
-
             NodeEntity nodeobj = new NodeEntity();
             double noviX, noviY;
             List<double> novixx = new List<double>();
@@ -105,22 +114,13 @@ namespace PredmetProjekat.Positioning
                 novixx.Add(noviX);
                 noviyy.Add(noviY);
             }
-            if (xy == true && minmax == true)
+            return new Approximation()
             {
-                return novixx.Min();
-            }
-            else if (xy == true && minmax == false)
-            {
-                return novixx.Max();
-            }
-            else if (xy == false && minmax == true)
-            {
-                return noviyy.Min();
-            }
-            else
-            {
-                return noviyy.Max();
-            }
+                xMinimum = novixx.Min(),
+                xMaximum = novixx.Max(),
+                yMinimum = noviyy.Min(),
+                yMaximum = noviyy.Max()
+            };
         }
 
 

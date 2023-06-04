@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,6 @@ namespace PredmetProjekat.BFS
         {
            return (row >= 0) && (row < rowcol) &&
                     (col >= 0) && (col < rowcol);
-            
         }
       
         public static Node DoBFS(bool[,] mat, Coordinate src,
@@ -34,9 +34,10 @@ namespace PredmetProjekat.BFS
             try
             {
                 Queue<Node> nq = new Queue<Node>();
-                Node node = new Models.Node(src.X,src.Y);
-
-                node.Parent = null;
+                Node node = new Models.Entities.Node(src.X, src.Y)
+                {
+                    Parent = null
+                };
                 nq.Enqueue(node);
 
                 Node curr = new Node(1,1);
@@ -49,15 +50,16 @@ namespace PredmetProjekat.BFS
                         int row = curr.X + rowNum[i];
                         int col = curr.Y + colNum[i];
                        
-                        
                         if (isValid(visited,row, col,size) && (!mat[row, col] || (row == dst.X && col == dst.Y)) &&
                         !visited[row, col])
                         {
                             visited[row, col] = true;
-                            Node parent = nq.Peek();
-                            Node nodeTemp = new Node(row,col, ref parent);
 
-                            nodeTemp.dst = parent.dst+1;
+                            Node parent = nq.Peek();
+                            Node nodeTemp = new Node(row, col, ref parent)
+                            {
+                                dst = parent.dst + 1
+                            };
 
                             if (dst.X == row && dst.Y == col)
                             {
@@ -65,11 +67,8 @@ namespace PredmetProjekat.BFS
                                 destination.Parent = parent;
                                 return destination;
                             }
-
                             nq.Enqueue(nodeTemp);
                         }
-
-                       
                     }
                     nq.Dequeue();
                 }

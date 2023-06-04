@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class NodeEntity : PowerEntity
+    public interface IGridData
     {
+
     }
 }
