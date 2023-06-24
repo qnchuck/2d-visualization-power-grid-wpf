@@ -31,55 +31,49 @@ namespace PredmetProjekat.BFS
             bool[,] visited = new bool[size,size];
             // Mark the source cell as visited
             visited[src.X, src.Y] = true;
-            try
+            
+            Queue<Node> nq = new Queue<Node>();
+            Node node = new Models.Entities.Node(src.X, src.Y)
             {
-                Queue<Node> nq = new Queue<Node>();
-                Node node = new Models.Entities.Node(src.X, src.Y)
-                {
-                    Parent = null
-                };
-                nq.Enqueue(node);
+                Parent = null
+            };
+            nq.Enqueue(node);
 
-                Node curr = new Node(1,1);
-                while (nq.Count != 0)
-                {
-                    curr = nq.Peek();
+            while (nq.Count != 0)
+            {
+                Node curr = nq.Peek();
                  
-                    for (int i = 0; i < 4; i++)
-                    {
-                        int row = curr.X + rowNum[i];
-                        int col = curr.Y + colNum[i];
+                for (int i = 0; i < 4; i++)
+                {
+                    int row = curr.X + rowNum[i];
+                    int col = curr.Y + colNum[i];
                        
-                        if (isValid(visited,row, col,size) && (!mat[row, col] || (row == dst.X && col == dst.Y)) &&
-                        !visited[row, col])
+                    if (isValid(visited,row, col,size) && (!mat[row, col] || (row == dst.X && col == dst.Y)) &&
+                    !visited[row, col])
+                    {
+                        visited[row, col] = true;
+
+                        Node parent = curr;
+                        Node nodeTemp = new Node(row, col, ref parent)
                         {
-                            visited[row, col] = true;
+                            dst = parent.dst + 1
+                        };
 
-                            Node parent = nq.Peek();
-                            Node nodeTemp = new Node(row, col, ref parent)
-                            {
-                                dst = parent.dst + 1
-                            };
-
-                            if (dst.X == row && dst.Y == col)
-                            {
-                                destination.dst = nodeTemp.dst;
-                                destination.Parent = parent;
-                                return destination;
-                            }
-                            nq.Enqueue(nodeTemp);
+                        if (dst.X == row && dst.Y == col)
+                        {
+                            destination.dst = nodeTemp.dst;
+                            destination.Parent = parent;
+                            return destination;
                         }
+                        nq.Enqueue(nodeTemp);
                     }
-                    nq.Dequeue();
                 }
-                /*DateTime sec2 = DateTime.Now;//DateTime.Compare(now2, sec1);// 
-                TimeSpan tt = sec2 - now2;//DateTime.Compare(now2, sec1);// 
-                Console.WriteLine(tt.TotalMilliseconds);*/
+                nq.Dequeue();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            /*DateTime sec2 = DateTime.Now;//DateTime.Compare(now2, sec1);// 
+            TimeSpan tt = sec2 - now2;//DateTime.Compare(now2, sec1);// 
+            Console.WriteLine(tt.TotalMilliseconds);*/
+           
 
             // Return -1 if destination cannot be reached
             return null;

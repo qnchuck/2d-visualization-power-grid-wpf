@@ -29,8 +29,8 @@ namespace PredmetProjekat.EntityCreationStrategy
             this.CreateRectangle(dimensions, size);
             this.SetRectangleColor();
             this.AddEntityToEntityList(size,dimensions,nodeApproximation);
-            this.SetToolTipContent();
             this.CreateRectangleToolTip();
+            this.SetToolTipContent();
 
             return rectangle; 
         }
@@ -55,6 +55,7 @@ namespace PredmetProjekat.EntityCreationStrategy
         protected abstract void SetToolTipContent();
         protected void CreateRectangleToolTip()
         {
+            toolTip = new ToolTip();
             toolTip.Background = Brushes.Black;
             toolTip.Foreground = Brushes.White;
             toolTip.BorderBrush = Brushes.Black;

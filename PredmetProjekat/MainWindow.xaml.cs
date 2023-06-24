@@ -226,7 +226,7 @@ namespace PredmetProjekat
                     double dist = distance(new Point(x1, y1), new Point(x2,y2));
 
                     Vod Vod = new Vod(x1, y1, x2,y2, dist);
-                    if (vodovizaSort.Where(x=>x.Key.X1==x1&&x.Key.X2==x2&&x.Key.Y1==y1&&x.Key.Y2==y2).FirstOrDefault().Key == null &&
+                    if (vodovizaSort.Where(x => x.Key.X1 == x1 && x.Key.X2 == x2 && x.Key.Y1 == y1 && x.Key.Y2 ==y2).FirstOrDefault().Key == null &&
                         vodovizaSort.Where(x => x.Key.X2 == x1 && x.Key.X1 == x2 && x.Key.Y2 == y1 && x.Key.Y1 == y2).FirstOrDefault().Key == null
                         )
                     {
@@ -238,13 +238,13 @@ namespace PredmetProjekat
                 }
             }
 
-            vodovizaSort.OrderBy(x => x.Key.Distanca);
+          //  vodovizaSort.OrderBy(x => x.Key.Distanca);
             List<Vod> vodovizaSortCopy = vodovizaSort.Keys.ToList();
 
             GridDataEntities.linesObjects = (bool[,])GridDataEntities.positions.Clone();
             DateTime sec1 = DateTime.Now;
             Console.WriteLine(vodovizaSort.Count());
-
+             // PODESI DA SE NE ISCRTAVA IZLAZ IZ PRESEKA
             for (int i = 0; i < vodovizaSortCopy.Count; i++)
             {
                 Vod node = vodovizaSortCopy[i];
@@ -264,7 +264,7 @@ namespace PredmetProjekat
                     Point p;
                     for (int j = 0; j < cnt ; j++)
                     {
-                        if (j > 0 )
+                      //  if (j > 0 )
                         {
                             GridDataEntities.linesIds[destination.X, destination.Y].Add(node.Id);
                         }
@@ -281,10 +281,17 @@ namespace PredmetProjekat
                     x = Approximation.GetCanvasX(dimensions, destination.X, size) + 0.5 * dimensions / size;
                     y = Approximation.GetCanvasY(dimensions, destination.Y, size) + 0.5 * dimensions / size;
                     p = new Point(x, y);
+                    GridDataEntities.linesIds[destination.X, destination.Y].Add(node.Id);
 
                     polyline.Points.Add(p); //polyline.Points.Add(new Point(source.X + 0.5, source.Y + 0.5));
                     polyline.Stroke = Brushes.Black;
                     polyline.StrokeThickness = 0.5 * dimensions / size;
+                    ToolTip ttip = new ToolTip();
+                    ttip.Content = "Line \nID: " + node.Id;
+                    ttip.Background = System.Windows.Media.Brushes.Black;
+                    ttip.Foreground = System.Windows.Media.Brushes.White;
+                    ttip.BorderBrush = System.Windows.Media.Brushes.Black;
+                    polyline.ToolTip = ttip;
                     GridDataEntities.lines.TryAdd(node.Id, new List<Polyline> { polyline });
                     elementi.Children.Add(polyline);
                 }
@@ -296,15 +303,15 @@ namespace PredmetProjekat
             List<Ellipse> elipse = new List<Ellipse>();
             for (int i = 0; i < vodovizaSort2.Count; i++)
             {
-                
+
                 Vod node = vodovizaSort2[i];
-                
+
                 Polyline polyline = new Polyline();
                 Coordinate source = new Coordinate { X = node.X1, Y = node.Y1 };
                 Coordinate dest = new Coordinate { X = node.X2, Y = node.Y2 };
                 Node destination = new Node(dest.X, dest.Y);
                 BreadthFirstSearch.DoBFS(GridDataEntities.linesObjects, source, dest, ref destination, size);
-                
+                bool isOverlaping = false;
                 if (destination.Parent != null)
                 {
 
@@ -314,8 +321,9 @@ namespace PredmetProjekat
                     double x;
                     double y;
                     Point p;
-                    Coordinate previous = new Coordinate{ X = destination.X, Y = destination.Y };
+                    Coordinate previous = new Coordinate { X = destination.X, Y = destination.Y };
 
+                    // if(node.Id==34108)
                     for (int j = 0; j < cnt; j++)
                     {
 
@@ -324,7 +332,9 @@ namespace PredmetProjekat
                         p = new Point(x, y);
                         int xRise = 0;
                         int yRise = 0;
-                        if (GridDataEntities.linesIds[destination.X, destination.Y].Count != 0 && j > 0 )
+
+
+                        if (GridDataEntities.linesIds[destination.X, destination.Y].Count != 0 && j > 0)
                         {
                             List<long> idslines = new List<long>();
                             double xx = Approximation.GetCanvasX(dimensions, destination.X, size);
@@ -336,28 +346,110 @@ namespace PredmetProjekat
                             rectangle.Width = 1.0 * dimensions / size;
                             rectangle.Height = 1.0 * dimensions / size;
                             rectangle.Margin = new Thickness(xx, yy, 0, 0);
-                            idslines = GridDataEntities.linesIds[previous.X , previous.Y].Intersect(GridDataEntities.linesIds[destination.X, destination.Y]).ToList();
+                            idslines = GridDataEntities.linesIds[previous.X, previous.Y].Intersect(GridDataEntities.linesIds[destination.X, destination.Y]).ToList();
                             // idslines = idslines.Intersect(GridDataEntities.linesIds[destination.X, destination.Y]).ToList();
                             bool foundIntersection = false;
-                            
+
                             if (idslines.Count == 0)
                             {
                                 elipse.Add(rectangle);
+                                double nx = Approximation.GetCanvasX(dimensions, destination.Parent.X, size) + 0.5 * dimensions / size;
+                                double ny = Approximation.GetCanvasY(dimensions, destination.Parent.Y, size) + 0.5 * dimensions / size;
+                                Point np = new Point(nx, ny);
+
+                                polyline.Points.Add(p);
+                                polyline.Points.Add(np);
+
+                                polyline.Stroke = Brushes.Black;
+                                polyline.StrokeThickness = 0.5 * dimensions / size;
+                                ToolTip ttips = new ToolTip();
+                                ttips.Content = "Line \nID: " + node.Id;
+                                ttips.Background = System.Windows.Media.Brushes.Black;
+                                ttips.Foreground = System.Windows.Media.Brushes.White;
+                                ttips.BorderBrush = System.Windows.Media.Brushes.Black;
+                                polyline.ToolTip = ttips;
+                                elementi.Children.Add(polyline);
+                                polyline = new Polyline();
+
+                                polyline.Stroke = Brushes.Black;
+                                polyline.StrokeThickness = 0.5 * dimensions / size;
+
                                 foundIntersection = true;
                             }
 
-                            if(!foundIntersection && GridDataEntities.linesIds[destination.X, destination.Y].
-                                Intersect(GridDataEntities.linesIds[destination.Parent.X, destination.Parent.Y]).ToList().Count==0
-                                && !(destination.Parent.X==source.X && destination.Parent.X==source.Y))
+                            if (!foundIntersection && GridDataEntities.linesIds[destination.X, destination.Y].
+                                Intersect(GridDataEntities.linesIds[destination.Parent.X, destination.Parent.Y]).ToList().Count == 0
+                                && !(destination.Parent.X == source.X && destination.Parent.Y == source.Y)
+                                )
                             {
+                                double nx = Approximation.GetCanvasX(dimensions, previous.X, size) + 0.5 * dimensions / size;
+                                double ny = Approximation.GetCanvasY(dimensions, previous.Y, size) + 0.5 * dimensions / size;
+                                Point np = new Point(nx, ny); 
+                                polyline.Points.Add(np);
+                                polyline.Points.Add(p);
                                 elipse.Add(rectangle);
                             }
-                            
+
 
                         }
+                        else
+                        /*  if (GridDataEntities.linesIds[destination.X, destination.Y].Count == 0 && isOverlaping)
+                          {
+                              double nx = Approximation.GetCanvasX(dimensions, previous.X, size) + 0.5 * dimensions / size;
+                              double ny = Approximation.GetCanvasY(dimensions, previous.Y, size) + 0.5 * dimensions / size;
+                              Point np = new Point(nx, ny);
+
+                              polyline.Points.Add(np);
+                              polyline.Points.Add(p);
+                              isOverlaping = false;
+                          }*/
+
+                        if (GridDataEntities.linesIds[destination.X, destination.Y].Count == 0)
+                        {
+                            bool anything = false;
+                            if (GridDataEntities.linesIds[previous.X, previous.Y].Count > 1)
+                            {
+                                double nx = Approximation.GetCanvasX(dimensions, previous.X, size) + 0.5 * dimensions / size;
+                                double ny = Approximation.GetCanvasY(dimensions, previous.Y, size) + 0.5 * dimensions / size;
+                                Point np = new Point(nx, ny);
+                                polyline.Points.Add(np);
+                                polyline.Points.Add(p);
+                                anything = true;
+                            }
+                            if (GridDataEntities.linesIds[destination.Parent.X, destination.Parent.Y].Count > 0)
+                            {
+                                double nx = Approximation.GetCanvasX(dimensions, destination.Parent.X, size) + 0.5 * dimensions / size;
+                                double ny = Approximation.GetCanvasY(dimensions, destination.Parent.Y, size) + 0.5 * dimensions / size;
+                                Point np = new Point(nx, ny);
+
+                                anything = true;
+                                polyline.Points.Add(p);
+                                polyline.Points.Add(np);
+
+                                polyline.Stroke = Brushes.Black;
+                                polyline.StrokeThickness = 0.5 * dimensions / size;
+                                ToolTip ttips = new ToolTip();
+                                ttips.Content = "Line \nID: " + node.Id;
+                                ttips.Background = System.Windows.Media.Brushes.Black;
+                                ttips.Foreground = System.Windows.Media.Brushes.White;
+                                ttips.BorderBrush = System.Windows.Media.Brushes.Black;
+                                polyline.ToolTip = ttips;
+                                elementi.Children.Add(polyline);
+                                polyline = new Polyline();
+
+                                polyline.Stroke = Brushes.Black;
+                                polyline.StrokeThickness = 0.5 * dimensions / size;
+
+                            }
+                            if (!anything)
+                            {
+                                polyline.Points.Add(p);
+                            }
+                        }
+
 
                         GridDataEntities.linesIds[destination.X, destination.Y].Add(node.Id);
-                        polyline.Points.Add(p);
+                       // polyline.Points.Add(p);
                         previous.X = destination.X;
                         previous.Y = destination.Y;
                         destination = destination.Parent;
@@ -372,6 +464,12 @@ namespace PredmetProjekat
 
                     polyline.Stroke = Brushes.Black;
                     polyline.StrokeThickness = 0.5 * dimensions / size;
+                    ToolTip ttip = new ToolTip();
+                    ttip.Content = "Line \nID: " + node.Id;
+                    ttip.Background = System.Windows.Media.Brushes.Black;
+                    ttip.Foreground = System.Windows.Media.Brushes.White;
+                    ttip.BorderBrush = System.Windows.Media.Brushes.Black;
+                    polyline.ToolTip = ttip;
                     elementi.Children.Add(polyline);
                 }
             }
@@ -389,6 +487,11 @@ namespace PredmetProjekat
         {
             return Math.Sqrt((Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2)));
 
+        }
+        private bool ArePointsEqual(Point point1, Point point2)
+        {
+            const double epsilon = 0.001;
+            return Math.Abs(point1.X - point2.X) < epsilon && Math.Abs(point1.Y - point2.Y) < epsilon;
         }
     }
 }
