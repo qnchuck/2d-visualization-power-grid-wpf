@@ -14,6 +14,8 @@ namespace Models.Entities
         private int y1;
         private int x2;
         private long id;
+        private long firstEnd;
+        private long secondEnd;
         private string name;
 
         public Vod(int x1, int y1, int x2, int y2, double distanca)
@@ -32,5 +34,7 @@ namespace Models.Entities
         public double Distanca { get => distanca; set => distanca = value; }
         public long Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
+        public long FirstEnd { get => firstEnd; set => firstEnd = value; }
+        public long SecondEnd { get => secondEnd; set => secondEnd = value; }
     }
 }

@@ -18,6 +18,7 @@ namespace Models
         private readonly int size = 500;
         public ConcurrentDictionary<long, NewEntity> entities;
         public ConcurrentDictionary<long, List<Polyline>> lines; 
+        public ConcurrentDictionary<long,Vod> vodoviClick; 
         public List<long>[,] linesIds;
         public bool[,] positions;
         public bool[,] linesObjects;
@@ -25,7 +26,7 @@ namespace Models
     
         private GridData()
         {
-            
+            vodoviClick = new ConcurrentDictionary<long, Vod>();
             entities = new ConcurrentDictionary<long,NewEntity>();
             linesIds = new List<long>[size, size];
             lines = new ConcurrentDictionary<long, List<Polyline>>();

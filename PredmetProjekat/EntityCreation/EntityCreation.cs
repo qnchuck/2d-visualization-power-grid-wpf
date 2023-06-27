@@ -49,10 +49,7 @@ namespace PredmetProjekat.EntityCreationStrategy
             rectangle = new Rectangle();
             rectangle.Width = 1.0 * dimensions / size;
             rectangle.Height = 1.0 * dimensions / size;
-            rectangle.Name = "ime" + powerEntity.Id.ToString();
         }
-        protected abstract void SetRectangleColor();
-        protected abstract void SetToolTipContent();
         protected void CreateRectangleToolTip()
         {
             toolTip = new ToolTip();
@@ -61,9 +58,7 @@ namespace PredmetProjekat.EntityCreationStrategy
             toolTip.BorderBrush = Brushes.Black;
             rectangle.ToolTip = toolTip;
         }
-        protected void AddEntityToEntityList(
-            int size, int dimensions,
-            Approximation nodeApproximation)
+        protected void AddEntityToEntityList(int size, int dimensions, Approximation nodeApproximation)
         {
             double newX = Approximation.GetX(size, convertedX, nodeApproximation.YMinimum, nodeApproximation.YMaximum),
                    newY = Approximation.GetY(size, convertedY, nodeApproximation.XMinimum, nodeApproximation.XMaximum);
@@ -71,7 +66,6 @@ namespace PredmetProjekat.EntityCreationStrategy
             Coordinate coordinate = Approximation.FindPosition(
                 gridDataEntities.positions, newX, newY
                 );
-
             gridDataEntities.positions[coordinate.X, coordinate.Y] = true;
             
             double x = Approximation.GetCanvasX(dimensions, coordinate.X, size);
@@ -81,5 +75,7 @@ namespace PredmetProjekat.EntityCreationStrategy
 
             gridDataEntities.entities.TryAdd(newEntity.Id, newEntity);
         }
+        protected abstract void SetRectangleColor();
+        protected abstract void SetToolTipContent();
     }
 }

@@ -29,10 +29,7 @@ namespace Models.Entities
             X = x;
             Y = y;
         }
-      /*  public void setAsParent(ref Node node)
-        {
-            this.Parent = node;
-        }*/
+     
     }
     
 }

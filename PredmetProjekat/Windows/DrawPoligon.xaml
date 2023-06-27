@@ -1,0 +1,40 @@
+﻿<Window x:Class="WpfApp1.DrawPoligon"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="DrawPoligon" Height="368" Width="196">
+
+    <Grid Margin="0,0,0,-26">
+        <xctk:ColorPicker Name="cp" Margin="24,79,24,243" DisplayColorAndName="True" 
+                          SelectedColorChanged="cp_SelectedColorChanged_1"
+                          AvailableColorsSortingMode="HueSaturationBrightness"
+                          ></xctk:ColorPicker>
+        <TextBox x:Name="textBox1" HorizontalAlignment="Center" Height="42" 
+                 Margin="0,20,0,0" TextWrapping="Wrap" Text="stroke thickness" 
+                 VerticalAlignment="Top" Width="147"
+                 PreviewTextInput="NumberValidationTextBox"/>
+        <Button x:Name="button" Content="Draw polygon"
+                HorizontalAlignment="Center" Height="53" 
+                Margin="0,284,0,0" VerticalAlignment="Top" 
+                Width="148" Click="button_Click"/>
+        <StackPanel Orientation="Vertical"  VerticalAlignment="Top" Margin="24,118,-24,0" Height="53">
+            <CheckBox x:Name="checkBoxTransparent" Content="Make element transparent" Height="36"/>
+            <CheckBox x:Name="checkBox" Content="Add text" Height="27"/>
+        </StackPanel>
+
+        <TextBox x:Name="textBox2" HorizontalAlignment="Center"
+                 Height="40" Margin="0,234,0,0" TextWrapping="Wrap" 
+                 Text="Optionally text over ellipse" VerticalAlignment="Top"
+                 Width="147"/>
+
+        <xctk:ColorPicker Name="cp2" Margin="24,199,24,124" DisplayColorAndName="True" 
+                          SelectedColorChanged="cp_SelectedColorChanged_1"
+                          AvailableColorsSortingMode="HueSaturationBrightness" RenderTransformOrigin="1.796,-1.58"
+                          ></xctk:ColorPicker>
+
+    </Grid>
+</Window>

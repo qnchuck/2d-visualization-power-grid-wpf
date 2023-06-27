@@ -25,20 +25,12 @@ namespace PredmetProjekat.BFS
         public static Node DoBFS(bool[,] mat, Coordinate src,
                                Coordinate dst, ref Node destination, int size)
         {
-            
-            // check source and destination cell
-            // of the matrix have value 1
             bool[,] visited = new bool[size,size];
-            // Mark the source cell as visited
             visited[src.X, src.Y] = true;
             
             Queue<Node> nq = new Queue<Node>();
-            Node node = new Models.Entities.Node(src.X, src.Y)
-            {
-                Parent = null
-            };
+            Node node = new Models.Entities.Node(src.X, src.Y) { Parent = null };
             nq.Enqueue(node);
-
             while (nq.Count != 0)
             {
                 Node curr = nq.Peek();
@@ -58,7 +50,6 @@ namespace PredmetProjekat.BFS
                         {
                             dst = parent.dst + 1
                         };
-
                         if (dst.X == row && dst.Y == col)
                         {
                             destination.dst = nodeTemp.dst;
@@ -70,12 +61,6 @@ namespace PredmetProjekat.BFS
                 }
                 nq.Dequeue();
             }
-            /*DateTime sec2 = DateTime.Now;//DateTime.Compare(now2, sec1);// 
-            TimeSpan tt = sec2 - now2;//DateTime.Compare(now2, sec1);// 
-            Console.WriteLine(tt.TotalMilliseconds);*/
-           
-
-            // Return -1 if destination cannot be reached
             return null;
         }
 
